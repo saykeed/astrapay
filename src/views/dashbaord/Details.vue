@@ -1,6 +1,10 @@
 <template>
     <div class="details">
         <p class="title">View Marketing Consultants</p>
+        <div class="profileBox">
+            {{dpName}}
+        </div>
+        <p class="subtitle">PROFILE</p>
         <div class="createForm">
             <form @submit.prevent="updateMarketerDetails">
                 <div class="inputs">
@@ -48,7 +52,7 @@ import { useRouter, useRoute } from 'vue-router'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    components: { },
+    components: { Spinner },
     setup () {
         // variables
         const route = useRoute()
@@ -63,7 +67,7 @@ export default {
         let token;
         let id = route.params.id
         const spinnerStatus = ref(false)
-
+        let dpName = ref(null)
         // functions
         const updateMarketerDetails = () => {
                 spinnerStatus.value = true
@@ -138,6 +142,7 @@ export default {
                 email.value = marketer.email
                 gender.value = marketer.gender
                 address.value = marketer.address
+                dpName.value = `${firstname.value[0]}.${lastname.value[0]}`
                 spinnerStatus.value = false
             })
             .catch(err => {
@@ -151,7 +156,8 @@ export default {
             checkIfUserLoggedIn()
         })
 
-       return { firstname, lastname, username, phone, email, gender, address, updateMarketerDetails, route, spinnerStatus }  
+       return { firstname, lastname, username, phone, email, gender, address, 
+       updateMarketerDetails, route, spinnerStatus, dpName }  
     }
 }
 </script>
@@ -164,13 +170,35 @@ export default {
         width: 100%;
         height: 100%;
         padding: 1rem;
+        overflow: auto;
 
         p.title{
             color: $appGreen;
         }
 
-        div.createForm{
+        div.profileBox{
+            width: 5rem;
+            height: 5rem;
+            border-radius: 100%;
             margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: $appGreen;
+            color: white;
+        }
+
+        p.subtitle{
+            border-bottom: 1px solid red;
+            font-size: $small;
+            color: $fadeBlack;
+            width: fit-content;
+            padding:0.5rem;
+            font-weight: 600;
+        }
+
+        div.createForm{
+            margin: 0.5rem auto 3rem;
             color: $fadeBlack;
             width: fit-content;
 
