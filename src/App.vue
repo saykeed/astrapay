@@ -1,30 +1,73 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+    <router-view v-if="route.path == '/login'"/>
+
+    <div class="appViewport" v-else>
+        <Sidebar v-if="sidebarStatus" @closeSidebar="toggleSidebarStatus"/>
+        <div :class="{ main: true, 'shrink': sidebarStatus }">
+            <Topbar @toggleSidebar="toggleSidebarStatus"/>
+            <div class="pages">
+                <router-view/>
+            </div>
+        </div>
+    </div>
+    
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Sidebar from '@/components/Sidebar.vue'
+import Topbar from '@/components/Topbar.vue'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-nav {
-  padding: 30px;
+export default {
+    components: { Sidebar, Topbar },
+    setup() {
+      // variables
+      const sidebarStatus = ref(false)
+      const route = useRoute()
+      
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+      // functions
+      const toggleSidebarStatus = () => {
+        sidebarStatus.value = !sidebarStatus.value
+      }
 
-    &.router-link-exact-active {
-      color: #42b983;
+      return { sidebarStatus, toggleSidebarStatus, route, }
     }
-  }
 }
+</script>
+
+<style lang="scss" scoped>
+@import "@/assets/scss/variable.scss";
+
+  div.appViewport{
+        height: 100vh;
+        width: 100vw;
+        border: 1px solid green;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+
+
+        div.main{
+            height: 100vh;
+            width: 100%;
+
+            div.pages{
+              height: calc(100% - 2.5rem);
+              // width: 100%;
+            }
+        }
+  }
+
+  @media only screen and (min-width: 700px) {
+      div.main{
+        
+        &.shrink{
+          width: calc(100% - 230px) !important;
+        }
+      }
+    
+  }
+
 </style>
