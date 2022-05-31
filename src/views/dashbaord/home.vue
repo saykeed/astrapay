@@ -8,6 +8,7 @@
         <div class="data">
             <AllMarketer 
               :marketers="marketers"
+              @reloadDashboard="reloadDashboard"
             />
         </div>
     </div>
@@ -27,6 +28,7 @@ export default {
         const router = useRouter()
         const marketers = ref(null)
         const spinnerStatus = ref(false)
+        let token;
 
 
         // functions
@@ -59,6 +61,7 @@ export default {
             let user = JSON.parse(sessionStorage.getItem("loggedInUser"));
             if(user) {
                 if(user.token) {
+                    token = user.token
                     fetchAllMarketers(user.token)
                 } else {
                     spinnerStatus.value = false
@@ -70,12 +73,16 @@ export default {
             }
         }
 
+        const reloadDashboard = () => {
+            fetchAllMarketers(token)
+        }
+
         // mounted
         onMounted(() => {
             checkIfUserLoggedIn()
         })
 
-       return { marketers, spinnerStatus}  
+       return { marketers, spinnerStatus, reloadDashboard}  
     }
 }
 </script>
@@ -88,6 +95,8 @@ export default {
         width: 100%;
         height: 100%;
         padding: 1rem;
+        position: relative;
+        overflow: auto;
 
         p.title{
             color: $appGreen;

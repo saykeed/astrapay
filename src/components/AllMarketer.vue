@@ -12,7 +12,7 @@
                 <p>Username</p>
             </div>
         </div>
-        <EachMarketer v-for="marketer in marketers" :key="marketer.marketing_consultant_id" :marketer="marketer"/>
+        <EachMarketer v-for="marketer in marketers" :key="marketer.marketing_consultant_id" :marketer="marketer" @reloadDashboard="reloadDashboard"/>
         <div class="controlContainer">
             <div class="control">
                 <p class="row">Rows per page:</p>
@@ -45,14 +45,16 @@ import EachMarketer from '@/components/EachMarketer.vue'
 export default {
     props: [ 'marketers' ],
     components: { EachMarketer },
-    setup() {
+    setup(props, { emit }) {
         // variables
         const searchTerm = ref(null)
         const rowPerPage = ref(2)
 
-
+        const reloadDashboard = () => {
+            emit('reloadDashboard')
+        }
         
-      return { searchTerm, rowPerPage }  
+      return { searchTerm, rowPerPage, reloadDashboard }  
     }
 }
 </script>

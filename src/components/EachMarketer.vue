@@ -6,7 +6,7 @@
         <div class="username">
              <p>{{marketer.username}}</p>
             <div class="buttons">
-                <i class="material-icons" @click="deleteMarketer(marketer.marketing_consultant_id)">delete</i>
+                <i class="material-icons" @click="deleteMarketer(marketer.username)">delete</i>
                 <router-link :to="`/details/${marketer.marketing_consultant_id}`">
                     <i class="material-icons">chevron_right</i>
                 </router-link>
@@ -23,24 +23,38 @@ import { useRouter } from 'vue-router'
 
 export default {
     props: [ 'marketer' ],
-    setup() {
+    setup(props, { emit }) {
         // variables
         const router = useRouter()
 
 
         // function 
-        const deleteMarketer = (id) => {
-            alert(id)
-        }
+        const deleteMarketer = (username) => {
+            let user = JSON.parse(sessionStorage.getItem("loggedInUser"));
+            const options = {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json', 
+                    'Content-Type': 'application/json',
+                    "Authorization": user.token
+                }
+            };
 
-        const marketerDetails = (id) => {
-            router.push({
-                path: '/details',
-                id: id
+            fetch(`https://proguardpeercover.herokuapp.com/marketers/${username}`, options)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                emit('reloadDashboard')
             })
+            .catch(err => {
+                console.log('error', err)
+            });
         }
 
-      return { deleteMarketer, marketerDetails}  
+        
+        
+
+      return { deleteMarketer}  
     }
 }
 </script>

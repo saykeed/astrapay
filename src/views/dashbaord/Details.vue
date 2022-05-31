@@ -64,6 +64,7 @@ export default {
         const email = ref(null)
         const gender = ref(null)
         const address = ref(null)
+        const marketingConsultantId = ref(null)
         let token;
         let id = route.params.id
         const spinnerStatus = ref(false)
@@ -74,7 +75,7 @@ export default {
                 const options = {
                     method: 'PUT',
                     headers: {
-                        Accept: 'application/json', 
+                        Accept: 'application/json',
                         'Content-Type': 'application/json',
                         "Authorization": token
                     },
@@ -85,7 +86,12 @@ export default {
                         phonenumber:phone.value,
                         email:email.value,
                         gender:gender.value,
-                        address:address.value
+                        address:address.value,
+                        marketingConsultantId:marketingConsultantId.value,
+                        bankname:"Access",
+                        bankcode:"001",
+                        accountNumber:"01234567826",
+                        accountName:"Jendel Jendel"
                     })
                 };
 
@@ -94,6 +100,7 @@ export default {
                 .then(data => {
                     console.log(data)
                     spinnerStatus.value = false
+                    router.push('/')
                 })
                 .catch(err => {
                     spinnerStatus.value = false
@@ -142,6 +149,7 @@ export default {
                 email.value = marketer.email
                 gender.value = marketer.gender
                 address.value = marketer.address
+                marketingConsultantId.value = marketer.marketing_consultant_id
                 dpName.value = `${firstname.value[0]}.${lastname.value[0]}`
                 spinnerStatus.value = false
             })
@@ -171,6 +179,7 @@ export default {
         height: 100%;
         padding: 1rem;
         overflow: auto;
+        position: relative;
 
         p.title{
             color: $appGreen;

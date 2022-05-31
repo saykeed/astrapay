@@ -2,9 +2,13 @@
     <div class="sidebar">
         <div class="content">
             <h1>PC</h1>
-            <router-link to="/dashboard">
+            <router-link to="/">
                 <i class="material-icons">dashboard</i>
                 DASHBOARD
+            </router-link>
+            <router-link to="/login">
+                <i class="material-icons">logout</i>
+                Login
             </router-link>
         </div>
         <div class="overlay" @click="closeSidebar"></div>
@@ -56,6 +60,16 @@ export default {
                 color: $fadeBlack;
                 font-size: $small;
                 font-weight: 600;
+                display: block;
+                margin: 0.5rem auto;
+                text-align: left;
+                padding: 0 0.5rem;
+                line-height: 2rem;
+
+                &:hover{
+                    background: $appGreen;
+                    color: white;
+                }
 
                 i{
                     font-size: 1rem;

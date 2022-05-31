@@ -89,6 +89,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
+                    router.push('/')
                     spinnerStatus.value = false
                 })
                 .catch(err => {
@@ -133,6 +134,7 @@ export default {
         width: 100%;
         height: 100%;
         padding: 1rem;
+        position: relative;
 
         p.title{
             color: $appGreen;
