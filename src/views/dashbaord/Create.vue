@@ -46,6 +46,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Spinner from '@/components/Spinner.vue'
+import { useStore } from 'vuex'
 
 export default {
     components: { Spinner },
@@ -61,6 +62,7 @@ export default {
         const address = ref(null)
         let token;
         const spinnerStatus = ref(false)
+        const store = useStore()
 
 
         // functions
@@ -88,7 +90,8 @@ export default {
                 fetch('https://proguardpeercover.herokuapp.com/marketers', options)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
+                    store.commit('showNotification', data.message)
                     router.push('/')
                     spinnerStatus.value = false
                 })

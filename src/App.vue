@@ -10,21 +10,31 @@
             </div>
         </div>
     </div>
-    
+    <transition
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
+    >
+      <Notification v-if="notificationStatus"/>
+    </transition>
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import Topbar from '@/components/Topbar.vue'
-import { ref } from 'vue'
+import Notification from '@/components/Notification.vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+import gsap from 'gsap'
 
 export default {
-    components: { Sidebar, Topbar },
+    components: { Sidebar, Topbar, Notification },
     setup() {
       // variables
       const sidebarStatus = ref(false)
       const route = useRoute()
+      const store = useStore()
       
 
       // functions
@@ -32,7 +42,35 @@ export default {
         sidebarStatus.value = !sidebarStatus.value
       }
 
-      return { sidebarStatus, toggleSidebarStatus, route, }
+      // functions to animate notification box
+      const beforeEnter = (el) => {
+          el.style.opacity = 0;
+          el.style.transform = 'translateX(200px)';
+      }
+      const enter = (el,done) => {
+          gsap.to(el, {
+              duration: 0.6,
+              opacity: 1,
+              translateX: 0,
+              onComplete: done
+          })
+      }
+      
+      const leave = (el, done) => {
+          gsap.to(el, {
+              duration: 0.4,
+              opacity: 0,
+              translateX: 200,
+              onComplete: done
+          })
+      }
+
+      // computed
+      const notificationStatus = computed(() => {
+        return store.state.notificationStatus
+      })
+
+      return { sidebarStatus, toggleSidebarStatus, route, notificationStatus, beforeEnter, enter, leave }
     }
 }
 </script>

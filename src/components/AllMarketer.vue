@@ -12,7 +12,7 @@
                 <p>Username</p>
             </div>
         </div>
-        <EachMarketer v-for="marketer in marketers" :key="marketer.marketing_consultant_id" :marketer="marketer" @reloadDashboard="reloadDashboard"/>
+        <EachMarketer v-for="marketer in filteredData" :key="marketer.marketing_consultant_id" :marketer="marketer" @reloadDashboard="reloadDashboard"/>
         <div class="controlContainer">
             <div class="control">
                 <p class="row">Rows per page:</p>
@@ -28,10 +28,10 @@
                     </select>
                     <i class="material-icons">arrow_drop_down</i>
                 </div>
-                <p v-if="marketers" class="dataShown">1-3of{{marketers.length}}</p>
+                <p v-if="marketers" class="dataShown">{{start+1}}-{{onScreenEndValue}}of{{marketers.length}}</p>
                 <div class="buttons">
-                    <button><i class="material-icons">chevron_left</i></button>
-                    <button><i class="material-icons">chevron_right</i></button>
+                    <button><i class="material-icons" @click="prevPage">chevron_left</i></button>
+                    <button><i class="material-icons" @click="nextPage">chevron_right</i></button>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import EachMarketer from '@/components/EachMarketer.vue'
 
 export default {
@@ -49,12 +49,46 @@ export default {
         // variables
         const searchTerm = ref(null)
         const rowPerPage = ref(2)
+        const currentPage = ref(1)
+        let start = ref(null)
+        let end = ref(null)
 
         const reloadDashboard = () => {
             emit('reloadDashboard')
         }
         
-      return { searchTerm, rowPerPage, reloadDashboard }  
+        const prevPage = () => {
+            if(currentPage.value > 1) {
+                currentPage.value--
+            }
+        }
+
+        const nextPage = () => {
+            if((currentPage.value * rowPerPage.value) < props.marketers.length) {
+                currentPage.value++
+            }
+        }
+
+        // computed
+        const filteredData = computed(() => {
+            if(props.marketers) {
+                return props.marketers.filter((row, index) => {
+                    start.value = (currentPage.value-1) * rowPerPage.value;
+                    end.value = currentPage.value * rowPerPage.value;
+                    if(index >= start.value && index < end.value) return true
+                })
+            }
+        })
+
+        const onScreenEndValue = computed(() => {
+            if(end.value > props.marketers.length) {
+                return props.marketers.length
+            } else {
+                return end.value
+            }
+        })
+        
+      return { searchTerm, rowPerPage, reloadDashboard, start, end, prevPage, nextPage, filteredData, onScreenEndValue }  
     }
 }
 </script>

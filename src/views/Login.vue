@@ -28,6 +28,7 @@
 import { ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import Spinner from '@/components/Spinner.vue'
+import { useStore } from 'vuex'
 
 export default {
   name: 'login',
@@ -38,6 +39,7 @@ export default {
     const password = ref(null)
     const router = useRouter()
     const spinnerStatus = ref(false)
+    const store = useStore()
 
     // functions
     const loginAdmin = () => {
@@ -58,13 +60,14 @@ export default {
       .then(response => response.json())
       .then(data => {
           console.log(data)
+          store.commit('showNotification', data.message)
           if(data.token) {
             saveDataToSessionStorage(data)
             spinnerStatus.value = false
             router.push('/')
           } else {
             spinnerStatus.value = false
-            alert('wrong details')
+            
           }
           
       })

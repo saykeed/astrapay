@@ -73,6 +73,7 @@ export default {
             }
         }
 
+        // refrshed the dashboard after an action has taken effect on it
         const reloadDashboard = () => {
             fetchAllMarketers(token)
         }

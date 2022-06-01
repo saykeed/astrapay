@@ -20,12 +20,14 @@
 
 <script>
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default {
     props: [ 'marketer' ],
     setup(props, { emit }) {
         // variables
         const router = useRouter()
+        const store = useStore()
 
 
         // function 
@@ -43,7 +45,8 @@ export default {
             fetch(`https://proguardpeercover.herokuapp.com/marketers/${username}`, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                // console.log(data)
+                store.commit('showNotification', data.message)
                 emit('reloadDashboard')
             })
             .catch(err => {

@@ -8,7 +8,7 @@
             </router-link>
             <router-link to="/login">
                 <i class="material-icons">logout</i>
-                Login
+                Logout
             </router-link>
         </div>
         <div class="overlay" @click="closeSidebar"></div>

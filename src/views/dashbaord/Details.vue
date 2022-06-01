@@ -50,11 +50,13 @@
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Spinner from '@/components/Spinner.vue'
+import { useStore } from 'vuex'
 
 export default {
     components: { Spinner },
     setup () {
         // variables
+        const store = useStore()
         const route = useRoute()
         const router = useRouter()
         const firstname = ref(null)
@@ -98,7 +100,8 @@ export default {
                 fetch('https://proguardpeercover.herokuapp.com/marketers', options)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
+                    store.commit('showNotification', data.message)
                     spinnerStatus.value = false
                     router.push('/')
                 })
@@ -140,7 +143,7 @@ export default {
             fetch(`https://proguardpeercover.herokuapp.com/marketers/${id}`, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data.marketer[0])
+                // console.log(data.marketer[0])
                 let marketer = data.marketer[0]
                 firstname.value = marketer.firstname
                 lastname.value = marketer.lastname
