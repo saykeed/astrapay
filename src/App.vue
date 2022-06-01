@@ -81,7 +81,6 @@ export default {
   div.appViewport{
         height: 100vh;
         width: 100vw;
-        border: 1px solid green;
         display: flex;
         align-items: center;
         overflow: hidden;

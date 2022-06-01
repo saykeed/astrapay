@@ -17,7 +17,7 @@
             <div class="control">
                 <p class="row">Rows per page:</p>
                 <div class="select">
-                    <select v-model="rowPerPage">
+                    <select v-model="rowPerPage" @change="backToPageOne">
                         <option 
                         :value="index"
                         v-for="(index) in 10"
@@ -53,6 +53,8 @@ export default {
         let start = ref(null)
         let end = ref(null)
 
+
+        // functions
         const reloadDashboard = () => {
             emit('reloadDashboard')
         }
@@ -67,6 +69,10 @@ export default {
             if((currentPage.value * rowPerPage.value) < props.marketers.length) {
                 currentPage.value++
             }
+        }
+
+        const backToPageOne = () => {
+            currentPage.value = 1
         }
 
         // computed
@@ -88,7 +94,8 @@ export default {
             }
         })
         
-      return { searchTerm, rowPerPage, reloadDashboard, start, end, prevPage, nextPage, filteredData, onScreenEndValue }  
+      return { searchTerm, rowPerPage, reloadDashboard, start, end, prevPage, nextPage, 
+      filteredData, onScreenEndValue, backToPageOne }  
     }
 }
 </script>
